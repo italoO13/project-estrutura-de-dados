@@ -1,4 +1,12 @@
-def exists_word(word, instance):
+from enum import Enum
+
+
+class Options(Enum):
+    EXISTS = 1
+    SEARCH = 2
+
+
+def aux_words(word, instance, opt: Options):
     words = []
     for index in range(instance.__len__()):
         occ_in_file = []
@@ -7,8 +15,10 @@ def exists_word(word, instance):
         lines_file = instance_content["linhas_do_arquivo"]
 
         for n, line in enumerate(lines_file):
-            if word.lower() in line.lower():
+            if word.lower() in line.lower() and opt == Options.EXISTS.value:
                 occ_in_file.append({"linha": n + 1})
+            if word.lower() in line.lower() and opt == Options.SEARCH.value:
+                occ_in_file.append({"linha": n + 1, "conteudo": line})
 
         if len(occ_in_file) > 0:
             words.append(
@@ -21,5 +31,9 @@ def exists_word(word, instance):
     return words
 
 
+def exists_word(word, instance):
+    return aux_words(word, instance, 1)
+
+
 def search_by_word(word, instance):
-    """Aqui irá sua implementação"""
+    return aux_words(word, instance, 2)
