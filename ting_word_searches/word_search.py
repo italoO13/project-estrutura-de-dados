@@ -14,11 +14,16 @@ def aux_words(word, instance, opt: Options):
         file_name = instance_content["nome_do_arquivo"]
         lines_file = instance_content["linhas_do_arquivo"]
 
-        for n, line in enumerate(lines_file):
-            if word.lower() in line.lower() and opt == Options.EXISTS.value:
-                occ_in_file.append({"linha": n + 1})
-            if word.lower() in line.lower() and opt == Options.SEARCH.value:
-                occ_in_file.append({"linha": n + 1, "conteudo": line})
+        occ_in_file = [
+            {"linha": n + 1}
+            for n, line in enumerate(lines_file)
+            if word.lower() in line.lower() and opt == Options.EXISTS.value
+        ]
+        occ_in_file += [
+            {"linha": n + 1, "conteudo": line}
+            for n, line in enumerate(lines_file)
+            if word.lower() in line.lower() and opt == Options.SEARCH.value
+        ]
 
         if len(occ_in_file) > 0:
             words.append(
